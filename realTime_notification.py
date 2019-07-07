@@ -34,7 +34,7 @@ def prase_web():
 #打印出info_text和info_link，并换行
 def check_info():
     pre = prase_web().get('info_text')
-    time.sleep(30)
+    time.sleep(1)
     ans = {}
     if pre!= prase_web().get('info_text'):
         print('中国海洋大学研究生招生信息网刚刚发布了新内容！')
