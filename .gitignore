@@ -1,0 +1,14 @@
+*.pyc
+*.pyo
+build
+build/*
+dist
+dist/*
+release
+release/*
+*.log
+*.ini
+temp
+temp/*
+plugin/temp
+plugin/temp/*
