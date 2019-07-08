@@ -1,6 +1,6 @@
 # qqRobot
 
-这是一个基于[QQLight](https://www.52chat.cc/download.php)Python机器人框架。
+这是一个基于[QQLight](https://www.52chat.cc/download.php)的Python机器人框架。
 
 ## 使用方法
 
