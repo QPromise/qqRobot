@@ -7,10 +7,10 @@
 ### 1、运行机器人客户端
  - 运行机器人客户端这个目录下的QQLight.exe启动登录qq，使用Air就行，可以满足一般的需求，不用购买Pro版。
 
-### 2、Python 自定义各种机器人接口
- - 将下载的master文件夹用IDE打开，我是用的是PyCharm。
- - 安装依赖包 `pip install -r requirements.txt`
- - 运行 `python QQLightBot.py -H 127.0.0.1 -P 49632 -U / -L INFO example:ExampleProtocol`
+### 2、Python自定义各种机器人接口
+ - 将下载的master文件夹用IDE打开，如PyCharm。
+ - 安装所需依赖包 `pip install -r requirements.txt`
+ - 在terminal运行 `python QQLightBot.py -H 127.0.0.1 -P 49632 -U / -L INFO example:ExampleProtocol`
 ## 功能实现
  - 考研倒计时回复。
  - 微博、网站内容爬取，群中关键字推送。
