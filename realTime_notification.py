@@ -1,9 +1,11 @@
-#coding=utf-8
-
+# -*- coding: utf-8 -*-
 import urllib.request
 from bs4 import BeautifulSoup
 import re
 import time
+"""
+网站新闻爬取
+"""
 def prase_web():
     url ='http://yz.ouc.edu.cn/5926/list.htm'
     #第一层循环，把url都导出来

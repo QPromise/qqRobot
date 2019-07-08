@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import time
 import logging
@@ -11,7 +10,7 @@ from realTime_notification import prase_web,check_info
 from get_weiboContent import *
 logger = logging.getLogger('QQLightBot')
 BaiduMatch = re.compile('^百度 (.*)', re.M | re.S)
-
+from time_judge import  time_judge
 class ExampleProtocol(ApiProtocol):
 
     @classmethod
@@ -32,8 +31,8 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, msgid=msgid, content=content)))
-
-        if group == '681882220' or group == '739538831' or group == '605565297':
+        #曲阜师范大学考研群
+        if group == '88145363':
             if content == '倒计时' or re.search('倒计时', content) and re.search('考研', content) or re.search('多少天',
                                                                                                        content) and re.search(
                     '考研', content) or re.search('几天', content) and re.search('考研', content):
@@ -47,12 +46,9 @@ class ExampleProtocol(ApiProtocol):
                 minute = (delta.seconds - hour * 60 * 60) / 60
                 seconds = delta.seconds - hour * 60 * 60 - minute * 60
                 print_now = now.strftime('%Y-%m-%d %H:%M:%S')
-                print("今天是：", print_now)
-                print("距离 2019-12-21 \"work\" 还剩下：%d天" % delta.days)
-                print(delta.days, hour, minute, seconds)
                 # 复读机
                 await cls.sendMessage(2, group, '',
-                                "[QQ:face=175]距离 2019-12-21 考研还有%d天" % delta.days)
+                                "[QQ:face="+time_judge()+"]距离 2019-12-21 考研还有%d天" % delta.days)
             elif content == '张宇':
                 id = '2058586920'
                 data = get_weibo(id)
@@ -88,21 +84,74 @@ class ExampleProtocol(ApiProtocol):
                 await cls.sendMessage(2, group, '',
                                       "[QQ:face=175]唐迟在" + str(data['created_at']) + "更新了微博，快来点击查看吧->" + str(
                                           data['scheme']))
-            elif content == '海大研招网':
+        #考研群，逗比海洋，测试群
+        if group == '681882220' or group == '739538831' or group == '605565297' or group == '391335231':
+            if content == '倒计时' or re.search('倒计时', content) and re.search('考研', content) or re.search('多少天',
+                                                                                                       content) and re.search(
+                    '考研', content) or re.search('几天', content) and re.search('考研', content):
+                # 构造一个将来的时间
+                future = datetime.strptime('2019-12-21 00:00:00', '%Y-%m-%d %H:%M:%S')
+                # 当前时间
+                now = datetime.now()
+                # 求时间差
+                delta = future - now
+                hour = delta.seconds / 60 / 60
+                minute = (delta.seconds - hour * 60 * 60) / 60
+                seconds = delta.seconds - hour * 60 * 60 - minute * 60
+                print_now = now.strftime('%Y-%m-%d %H:%M:%S')
+                # 复读机
+                await cls.sendMessage(2, group, '',
+                                "[QQ:face="+time_judge()+"]距离 2019-12-21 考研还有%d天" % delta.days)
+            elif content == '张宇':
+                id = '2058586920'
+                data = get_weibo(id)
+                await cls.sendMessage(2, group, '',
+                                      "[QQ:face=175]张宇在"+str(data['created_at'])+"更新了微博，快来点击查看吧->"+str(data['scheme']))
+            elif content == '汤家凤':
+                id = '2644595644'
+                data = get_weibo(id)
+                await cls.sendMessage(2, group, '',
+                                      "[QQ:face=175]汤家凤在" + str(data['created_at']) + "更新了微博，快来点击查看吧->" + str(
+                                          data['scheme']))
+            elif content == '肖秀荣':
+                id = '1227078145'
+                data = get_weibo(id)
+                await cls.sendMessage(2, group, '',
+                                      "[QQ:face=175]肖秀荣在" + str(data['created_at']) + "更新了微博，快来点击查看吧->" + str(
+                                          data['scheme']))
+            elif content == '李永乐':
+                id ='2440693053'
+                data = get_weibo(id)
+                await cls.sendMessage(2, group, '',
+                                      "[QQ:face=175]李永乐在" + str(data['created_at']) + "更新了微博，快来点击查看吧->" + str(
+                                          data['scheme']))
+            elif content == '李林':
+                id= '6444289173'
+                data = get_weibo(id)
+                await cls.sendMessage(2, group, '',
+                                      "[QQ:face=175]李林在" + str(data['created_at']) + "更新了微博，快来点击查看吧->" + str(
+                                          data['scheme']))
+            elif content == '唐迟':
+                id = '1491569192'
+                data = get_weibo(id)
+                await cls.sendMessage(2, group, '',
+                                      "[QQ:face=175]唐迟在" + str(data['created_at']) + "更新了微博，快来点击查看吧->" + str(
+                                          data['scheme']))
+            elif content == '研招网':
                  news = check_info()
                  if  news['flag']:
                      await cls.sendMessage(2, group, '',
                                              "中国海洋大学研究生招生信息网有新发布的内容，主题为：《"+news.get('info_text')+'》\n点击网址进入查看：'+news.get('url'))
                  elif not news['flag']:
                              await cls.sendMessage(2, '681882220', '',
-                                             "中国海洋大学研究生招生信息网暂时没有新发布的内容，最新发布的主题为：《"+news.get('info_text')+'》\n点击网址进入查看：'+news.get('url'))
+                                             "中国海洋大学研究生招生信息网最新发布的主题为：《"+news.get('info_text')+'》\n点击网址进入查看：'+news.get('url'))
             elif re.search('院',content) and re.search('网',content):
                 await cls.sendMessage(2, group, '',
                                 "中国海洋大学信息学院网站:\nhttp://it.ouc.edu.cn/")
             elif re.search('系',content) and re.search('网',content):
                 await cls.sendMessage(2, group, '',
                                       "中国海洋大学计算机科学与技术系网站:\nhttp://cs.ouc.edu.cn/")
-            if re.search('免费资料',content):
+            if re.search('免费',content) and re.search('资料',content):
                 await  cls.silence(qq, group, duration = 2592000)
                 await  cls.withdrawMessage(group, msgid)
             if qq =='815221919' and re.search('禁言\[QQ:',content):
@@ -141,11 +190,14 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, operator=operator)))
-        if group == '681882220' or group == '605565297':
+        if group == '681882220' or group == '605565297' or group == '391335231':
             await cls.sendMessage(2, group, '',
                               "进群请改备注，如：20-软工专-张三[QQ:face=144]记得看群文件和群公告，可以解决大多数疑惑[QQ:face=183]不要发广告[QQ:face=181]\n" + "[QQ:at={0}]".format(
                                   qq))
-
+        if group == '88145363':
+            await cls.sendMessage(2, group, '',
+                              "进群请改备注，如：20-计算机-张三[QQ:face=144]记得看群文件，有今年的录取情况，不要发广告[QQ:face=181][QQ:emoji=14912151][QQ:emoji=15710351]一战成研\n" + "[QQ:at={0}]".format(
+                                  qq))
     @classmethod
     async def groupMemberDecrease(cls, type='', qq='',  # @ReservedAssignment
                                   group='', operator=''):
@@ -158,7 +210,7 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, operator=operator)))
-        if group == '681882220' or group == '605565297':
+        if group == '681882220' or group == '605565297' or group == '391335231':
             fight_words = ['He laughs best who laughs last.', 'Push yourself until the end.',
                            'Sticking to the end is the best.', 'Everything happens for a resaon.',
                            'Have faith in yourself.', 'I have got your back.','All things come to those who wait.',

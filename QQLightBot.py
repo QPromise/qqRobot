@@ -10,12 +10,11 @@ import logging
 import os
 import sys
 from typing import List
-
 import aiohttp
 
-
-
-
+"""
+QQLight接口实现
+"""
 class MsgDict(dict):
 
     def __setattr__(self, key, value):

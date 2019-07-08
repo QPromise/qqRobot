@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-
 import urllib.request
 import json
 import re
-#定义要爬取的微博大V的微博ID
+
+"""
+微博爬取功能的实现
+"""
 
 #设置代理IP
 proxy_addr="122.241.72.191:808"
@@ -78,5 +80,3 @@ def get_weibo(id):
     except Exception as e:
         print(e)
         pass
-# if __name__ == '__main__':
-#     get_weibo(id)
