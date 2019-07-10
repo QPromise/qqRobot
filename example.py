@@ -4,10 +4,11 @@ import logging
 import re
 from urllib.parse import quote
 import random
-from QQLightBot import ApiProtocol
+from QQLightBot import ApiProtocol,MsgDict
 from datetime import datetime
 from realTime_notification import prase_web,check_info
 from get_weiboContent import *
+from test_direction import *
 logger = logging.getLogger('QQLightBot')
 BaiduMatch = re.compile('^百度 (.*)', re.M | re.S)
 from time_judge import  time_judge
@@ -18,6 +19,18 @@ class ExampleProtocol(ApiProtocol):
         """连接成功
         """
         logger.info('connect succeed')
+
+
+    @classmethod
+    async def getGroupMemberList(cls, group):
+        """接口.获取群成员列表
+        :param cls:
+        :param group:       群号或讨论组号
+        """
+        await cls._ws.send_json(cls._makeData(
+            'getGroupMemberList', group=group))
+        result = await cls._ws.receive()
+        return MsgDict(json.loads(result.data)['result']['members'])
 
     @classmethod
     async def message(cls, type=0, qq='', group='', msgid='', content=''):  # @ReservedAssignment
@@ -61,7 +74,7 @@ class ExampleProtocol(ApiProtocol):
         功能使用模块
         """
         #考研群，逗比海洋，测试群
-        if group == '681882220' or group == '605565297' :
+        if group == '681882220' or group == '605565297' or group == '778577978':
             if content == '倒计时' or re.search('倒计时', content) and re.search('考研', content) or re.search('多少天',
                                                                                                        content) and re.search(
                     '考研', content) or re.search('几天', content) and re.search('考研', content):
@@ -102,6 +115,15 @@ class ExampleProtocol(ApiProtocol):
                 silences_qq = re.findall(regex, content)
                 for silence_qq in silences_qq:
                     await  cls.silence(silence_qq, group, duration=2592000)
+            if content == '参考':
+                members = await cls.getGroupMemberList('681882220')
+                end_ratio = test_direction(members)
+                await cls.sendMessage(2, group, '',
+                                      "当前专硕参考比910:911:940， {0}:{1}:{2}\n".format(end_ratio[0],end_ratio[1],end_ratio[2])+
+                                      "\n当前学硕参考比912:940:954， {0}:{1}:{2}\n".format(end_ratio[3],end_ratio[4],end_ratio[5])+
+                                      "\n专硕:学硕， {}:1".format(end_ratio[6]/10))
+
+
     @classmethod
     async def friendRequest(cls, qq='', message=''):
         """事件.收到好友请求
@@ -133,7 +155,7 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, operator=operator)))
-        if group == '681882220' or group == '605565297' :
+        if group == '681882220' or group == '605565297' or group == '778577978' :
             await cls.sendMessage(2, group, '',
                               "进群请改备注，如：20-软工专-张三[QQ:face=144]记得看群文件和群公告，可以解决大多数疑惑[QQ:face=183]不要发广告[QQ:face=181]\n" + "[QQ:at={0}]".format(
                                   qq))
@@ -153,7 +175,7 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, operator=operator)))
-        if group == '681882220' or group == '605565297' :
+        if group == '681882220' or group == '605565297' or group == '778577978':
             fight_words = ['He laughs best who laughs last.', 'Push yourself until the end.',
                            'Sticking to the end is the best.', 'Everything happens for a resaon.',
                            'Have faith in yourself.', 'I have got your back.','All things come to those who wait.',

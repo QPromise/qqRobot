@@ -11,7 +11,7 @@ def prase_web():
     #第一层循环，把url都导出来
     #定义发送的请求
     head = {}
-    head['User-Agent'] = 'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19'
+    head['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0'
     req=urllib.request.Request(url,headers=head)
     #将服务器返回的页面放入rsp变量
     rsp = urllib.request.urlopen(req)
@@ -51,3 +51,4 @@ def check_info():
         print(ans)
         return ans
 
+check_info()
