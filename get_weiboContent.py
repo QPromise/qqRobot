@@ -48,7 +48,7 @@ def get_userInfo(id):
 #提取html标签中的内容
 def get_text(html):
     text = re.sub('<head.*?>.*?</head>', '', html, flags=re.M | re.S | re.I)
-    text = re.sub('<a\s.*?>', ' HYPERLINK ', text, flags=re.M | re.S | re.I)
+    text = re.sub('<a\s.*?>', '', text, flags=re.M | re.S | re.I)
     text = re.sub('<.*?>', '', text, flags=re.M | re.S)
     text = re.sub(r'(\s*\n)+', '\n', text, flags=re.M | re.S)
     print(text)
@@ -78,11 +78,11 @@ def get_weibo(id):
                         reposts_count = mblog.get('reposts_count')
                         scheme = cards[j].get('scheme')
                         text = mblog.get('text')
-                        text = get_text(text)
-                        text = text.replace('HYPERLINK','')
+                        text = get_text(text) # html格式提取text
+                        #text = text.replace('HYPERLINK','')
                         #print(text)
                         res = {"scheme":scheme,"created_at":created_at,"text":text}
-                        #print("微博地址："+str(scheme)+"\n"+"发布时间："+str(created_at)+"\n"+"微博内容："+text+"\n"+"点赞数："+str(attitudes_count)+"\n"+"评论数："+str(comments_count)+"\n"+"转发数："+str(reposts_count)+"\n")
+                        print("微博地址："+str(scheme)+"\n"+"发布时间："+str(created_at)+"\n"+"微博内容："+text+"\n"+"点赞数："+str(attitudes_count)+"\n"+"评论数："+str(comments_count)+"\n"+"转发数："+str(reposts_count)+"\n")
                         return res
                     else:
                         pass
@@ -94,7 +94,9 @@ def get_weibo(id):
 # 这是执行的主函数
 def weibo_content(content):
     name_list = {'张宇':'2058586920','汤家凤':'2644595644',
-                 '肖秀荣':'1227078145','李永乐':'2440693053','李林':'6444289173','唐迟':'1491569192'}
+                 '肖秀荣':'1227078145','李永乐':'2440693053',
+                 '李林':'6444289173','唐迟':'1491569192',
+                 '谭剑波':'2056180751','朱伟':'1190953227'}
     if content in name_list:
         data = get_weibo(name_list[content])
         res = "[QQ:face=175]" + content+"在" + str(data['created_at']) + "更新了微博" + str(data['scheme'])+"\n主要内容:\n"+str(data['text'])
@@ -102,4 +104,4 @@ def weibo_content(content):
     else:
         return None
 # 测试
-# weibo_content('汤家凤')
+# weibo_content('张宇')
