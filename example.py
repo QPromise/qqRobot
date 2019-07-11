@@ -124,7 +124,7 @@ class ExampleProtocol(ApiProtocol):
                                       "\n当前学硕参考比912:940:954， {0}:{1}:{2}\n".format(end_ratio[3],end_ratio[4],end_ratio[5])+
                                       "\n专硕:学硕， {}:1".format(end_ratio[6]/10))
             if content == '本群词云':
-                png_path = cls.formatImage('D:\Chrome浏览器下载\QQLightBot-master\worldcloud.png')
+                png_path = cls.formatImage('D:\Chrome浏览器下载\QQLightBot\worldcloud.png')
                 await cls.sendMessage(2, group,'',png_path)
                 members = await cls.getGroupMemberList(group)
                 generate_world(members)
