@@ -11,11 +11,19 @@
  - 将下载的master文件夹用IDE打开，如PyCharm。
  - 安装所需依赖包 `pip install -r requirements.txt`
  - 在terminal运行 `python QQLightBot.py -H 127.0.0.1 -P 49632 -U / -L INFO example:ExampleProtocol`
+## 各模块主要功能
+ - 主要模块为example.py,在其中导入了其它功能模块
+ - generate_wordcloud.py:群备注词云生成
+ - get_weiboContent.py:获取指定id第一条微博
+ - realTime_notification.py:指定网站的更新通知获取
+ - test_direction.py:考试目标方向的比例统计
+ - time_judge.py:白天三个时间段的判断
 ## 功能实现
  - 考研倒计时回复。
  - 微博、网站内容爬取，群中关键字推送。
+ - 群备注词云推送，以及各部分比例统计。
  - 白天分三个时间段表情包变换。
- - 群成员进群退群监控推送。
+ - 群成员进群退群监控。
  - 里面example.py的代码内容根据自己的需求修改即可，记得把群号改为自己QQLight登录的qq加入的群，这是前提。
 ## 接口功能列表
  -   Air版（免费，适用于非营利性个人用户）
