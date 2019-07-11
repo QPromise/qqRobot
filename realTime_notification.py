@@ -50,5 +50,3 @@ def check_info():
         ans['flag'] = 0
         print(ans)
         return ans
-
-check_info()

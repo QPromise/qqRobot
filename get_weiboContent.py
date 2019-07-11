@@ -93,12 +93,13 @@ def get_weibo(id):
         pass
 # 这是执行的主函数
 def weibo_content(content):
-    name_list = {'张宇':'2058586920','汤家凤':'2644595644',
+    id_dict = {'张宇':'2058586920','汤家凤':'2644595644',
                  '肖秀荣':'1227078145','李永乐':'2440693053',
                  '李林':'6444289173','唐迟':'1491569192',
-                 '谭剑波':'2056180751','朱伟':'1190953227'}
-    if content in name_list:
-        data = get_weibo(name_list[content])
+                 '谭剑波':'2056180751','朱伟':'1190953227',
+                 '商志':'1114286271','陆寓丰':'1925027893'}
+    if content in id_dict:
+        data = get_weibo(id_dict[content])
         res = "[QQ:face=175]" + content+"在" + str(data['created_at']) + "更新了微博" + str(data['scheme'])+"\n主要内容:\n"+str(data['text'])
         return res
     else:

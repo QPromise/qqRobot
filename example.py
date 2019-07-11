@@ -9,6 +9,7 @@ from datetime import datetime
 from realTime_notification import prase_web,check_info
 from get_weiboContent import *
 from test_direction import *
+from generate_wordcloud import *
 logger = logging.getLogger('QQLightBot')
 BaiduMatch = re.compile('^百度 (.*)', re.M | re.S)
 from time_judge import  time_judge
@@ -116,14 +117,25 @@ class ExampleProtocol(ApiProtocol):
                 for silence_qq in silences_qq:
                     await  cls.silence(silence_qq, group, duration=2592000)
             if content == '参考':
-                members = await cls.getGroupMemberList('681882220')
+                members = await cls.getGroupMemberList(group)
                 end_ratio = test_direction(members)
                 await cls.sendMessage(2, group, '',
                                       "当前专硕参考比910:911:940， {0}:{1}:{2}\n".format(end_ratio[0],end_ratio[1],end_ratio[2])+
                                       "\n当前学硕参考比912:940:954， {0}:{1}:{2}\n".format(end_ratio[3],end_ratio[4],end_ratio[5])+
                                       "\n专硕:学硕， {}:1".format(end_ratio[6]/10))
-
-
+            if content == '本群词云':
+                png_path = cls.formatImage('D:\Chrome浏览器下载\QQLightBot-master\worldcloud.png')
+                await cls.sendMessage(2, group,'',png_path)
+                members = await cls.getGroupMemberList(group)
+                generate_world(members)
+    @classmethod
+    def formatImage(cls, path, flash=False):
+        """图片
+        :param cls:
+        :param path:          图片GUID或者URL
+        :param flash:         True表示闪照
+        """
+        return '[QQ:{0}pic={1}]'.format('flash,' if flash else '', path)
     @classmethod
     async def friendRequest(cls, qq='', message=''):
         """事件.收到好友请求
