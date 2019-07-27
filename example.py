@@ -11,17 +11,22 @@ from get_weiboContent import *
 from test_direction import *
 from generate_wordcloud import *
 logger = logging.getLogger('QQLightBot')
-BaiduMatch = re.compile('^百度 (.*)', re.M | re.S)
 from time_judge import  time_judge
-class ExampleProtocol(ApiProtocol):
 
+
+class ExampleProtocol(ApiProtocol):
+    # @classmethod
+    # async def send_intime(cls):
+    #     if time.strptime(time.strftime("%H%M%S"), "%H%M%S") == time.strptime('170920', "%H%M%S"):
+    #             await cls.sendMessage(2, '605565297', '', '[QQ:pic=cbef2ca7-b5bd-d1be-1e15-a35e630d0fa6.jpg]')
     @classmethod
     async def onConnect(cls):
         """连接成功
         """
         logger.info('connect succeed')
-
-
+        # sched = BlockingScheduler()
+        # sched.add_job(cls.sendMessage(2, '605565297', '', '[QQ:pic=cbef2ca7-b5bd-d1be-1e15-a35e630d0fa6.jpg]'), 'cron', day_of_week='1-5', hour=17, minute=17)
+        # sched.start()
     @classmethod
     async def getGroupMemberList(cls, group):
         """接口.获取群成员列表
@@ -31,7 +36,8 @@ class ExampleProtocol(ApiProtocol):
         await cls._ws.send_json(cls._makeData(
             'getGroupMemberList', group=group))
         result = await cls._ws.receive()
-        return MsgDict(json.loads(result.data)['result']['members'])
+        print(json.loads(result.data))
+        return MsgDict(json.loads(result.data))['result']['members']
 
     @classmethod
     async def message(cls, type=0, qq='', group='', msgid='', content=''):  # @ReservedAssignment
@@ -45,6 +51,12 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, msgid=msgid, content=content)))
+        """
+        测试模块
+        """
+        # if group == '605565297' and weibo_content(content):
+        #     await cls.sendMessage(2, group, '',weibo_content(content))
+
         #曲阜师范大学考研群
         if group == '88145363':
             if content == '倒计时' or re.search('倒计时', content) and re.search('考研', content) or re.search('多少天',
@@ -60,21 +72,15 @@ class ExampleProtocol(ApiProtocol):
                 minute = (delta.seconds - hour * 60 * 60) / 60
                 seconds = delta.seconds - hour * 60 * 60 - minute * 60
                 print_now = now.strftime('%Y-%m-%d %H:%M:%S')
-                # 复读机
                 await cls.sendMessage(2, group, '',
                                 "[QQ:face="+time_judge()+"]距离 2019-12-21 考研还有%d天" % delta.days)
             elif weibo_content(content):
                 await cls.sendMessage(2, group, '', weibo_content(content))
-        """
-        测试模块
-        """
-        if group == '605565297' and weibo_content(content):
-            await cls.sendMessage(2, group, '',weibo_content(content))
 
         """
         功能使用模块
         """
-        #考研群，逗比海洋，测试群
+        #考研群,测试群
         if group == '681882220' or group == '605565297' or group == '778577978':
             if content == '倒计时' or re.search('倒计时', content) and re.search('考研', content) or re.search('多少天',
                                                                                                        content) and re.search(
@@ -89,7 +95,6 @@ class ExampleProtocol(ApiProtocol):
                 minute = (delta.seconds - hour * 60 * 60) / 60
                 seconds = delta.seconds - hour * 60 * 60 - minute * 60
                 print_now = now.strftime('%Y-%m-%d %H:%M:%S')
-                # 复读机
                 await cls.sendMessage(2, group, '',
                                 "[QQ:face="+time_judge()+"]距离 2019-12-21 考研还有%d天" % delta.days)
             elif weibo_content(content):
@@ -108,34 +113,32 @@ class ExampleProtocol(ApiProtocol):
             elif re.search('系',content) and re.search('网',content):
                 await cls.sendMessage(2, group, '',
                                       "中国海洋大学计算机科学与技术系网站:\nhttp://cs.ouc.edu.cn/")
-            if re.search('免费',content) and re.search('资料',content):
+            elif re.search('免费',content) and re.search('资料',content):
                 await  cls.silence(qq, group, duration = 2592000)
                 await  cls.withdrawMessage(group, msgid)
-            if qq =='815221919' and re.search('禁言\[QQ:',content):
+            elif qq =='815221919' and re.search('禁言\[QQ:',content):
                 regex = r'=([\s\S]*)]'
                 silences_qq = re.findall(regex, content)
                 for silence_qq in silences_qq:
                     await  cls.silence(silence_qq, group, duration=2592000)
-            if content == '参考':
+            elif content == '群备注比例':
                 members = await cls.getGroupMemberList(group)
                 end_ratio = test_direction(members)
                 await cls.sendMessage(2, group, '',
-                                      "当前专硕参考比910:911:940， {0}:{1}:{2}\n".format(end_ratio[0],end_ratio[1],end_ratio[2])+
-                                      "\n当前学硕参考比912:940:954， {0}:{1}:{2}\n".format(end_ratio[3],end_ratio[4],end_ratio[5])+
-                                      "\n专硕:学硕， {}:1".format(end_ratio[6]/10))
-            if content == '本群词云':
-                png_path = cls.formatImage('D:\Chrome浏览器下载\QQLightBot\worldcloud.png')
+                                      "当前修改备注人数为{}人\n".format(end_ratio[7]) +
+                                      "专硕中910:911:940为 {0}:{1}:{2}\n".format(end_ratio[0], round(end_ratio[1], 1),
+                                                                             end_ratio[2]) +
+                                      "学硕中912:940:954为 {0}:{1}:{2}\n".format(end_ratio[3], end_ratio[4], end_ratio[5]) +
+                                      "专硕:学硕为{}:1".format(round(end_ratio[6] / 10, 1)))
+            elif content == '本群词云':
+                png_path = cls.formatImage('D:\Chrome浏览器下载\QQLightBot-master\worldcloud.png')
                 await cls.sendMessage(2, group,'',png_path)
                 members = await cls.getGroupMemberList(group)
+                print(members)
                 generate_world(members)
-    @classmethod
-    def formatImage(cls, path, flash=False):
-        """图片
-        :param cls:
-        :param path:          图片GUID或者URL
-        :param flash:         True表示闪照
-        """
-        return '[QQ:{0}pic={1}]'.format('flash,' if flash else '', path)
+
+            if time.strptime(time.strftime("%H%M%S"), "%H%M%S") == time.strptime('220000',"%H%M%S"):
+                await cls.sendMessage(2, '605565297', '', '[QQ:pic=cbef2ca7-b5bd-d1be-1e15-a35e630d0fa6.jpg]')
     @classmethod
     async def friendRequest(cls, qq='', message=''):
         """事件.收到好友请求
@@ -167,10 +170,18 @@ class ExampleProtocol(ApiProtocol):
         """
         logger.info(
             str(dict(type=type, qq=qq, group=group, operator=operator)))
-        if group == '681882220' or group == '605565297' or group == '778577978' :
-            await cls.sendMessage(2, group, '',
-                              "进群请改备注，如：20-软工专-张三[QQ:face=144]记得看群文件和群公告，可以解决大多数疑惑[QQ:face=183]不要发广告[QQ:face=181]\n" + "[QQ:at={0}]".format(
-                                  qq))
+        # 先判断是否是黑名单用户,感觉进群禁言比直接拒绝更好玩。
+        black_list = ['1371087907']  # 黑名单列表
+        if group == '681882220' or group == '605565297' or group == '778577978':
+            if str(qq) in black_list:
+                await cls.sendMessage(2, group, '',
+                                      "恭喜新进群的黑名单用户[QQ:face=144]，你将享受秒执行的无限期一个月禁言套餐哦，开心吧[QQ:face=14]" + "[QQ:at={0}]".format(
+                                          qq))
+                await cls.silence(qq, group, duration=2592000)
+            else:
+                await cls.sendMessage(2, group, '',
+                                      "进群请改备注，如：20-软工专-张三[QQ:face=144]记得看群文件和群公告，可以解决大多数疑惑[QQ:face=183]不要发广告[QQ:face=181]" + "[QQ:at={0}]".format(
+                                          qq))
         if group == '88145363':
             await cls.sendMessage(2, group, '',
                               "进群请改备注，如：20-计算机-张三[QQ:face=144]记得看群文件，有今年的录取情况，不要发广告[QQ:face=181][QQ:emoji=14912151][QQ:emoji=15710351]一战成研\n" + "[QQ:at={0}]".format(
@@ -188,7 +199,7 @@ class ExampleProtocol(ApiProtocol):
         logger.info(
             str(dict(type=type, qq=qq, group=group, operator=operator)))
         if group == '681882220' or group == '605565297' or group == '778577978':
-            fight_words = ['He laughs best who laughs last.', 'Push yourself until the end.',
+            fight_words = ['He laughs best who laughs last.', 'Talk is cheap,make the move.','Push yourself until the end.',
                            'Sticking to the end is the best.', 'Everything happens for a resaon.',
                            'Have faith in yourself.', 'I have got your back.','All things come to those who wait.',
                            'The shortest way to do many things is to only one thing at a time.','Nothing seek, nothing find.',

@@ -39,9 +39,6 @@ def test_direction(members):
                 pro += 1
             else:
                 other += 1
-    res = [ratio(pro_910,pro),ratio(pro_911,pro),ratio(pro_940,pro),ratio(ac_912,ac),ratio(ac_940,ac),ratio(ac_954,ac),ratio(pro,ac)]
-    print(res)
-    print(ratio(pro_910,pro),ratio(pro_911,pro),ratio(pro_940,pro),ratio(ac_912,ac),ratio(ac_940,ac),ratio(ac_954,ac),ratio(pro,ac))
-    print('#################################')
-    print(alias)
+    res = [ratio(pro_910,pro),ratio(pro_911,pro),ratio(pro_940,pro),ratio(ac_912,ac),ratio(ac_940,ac),ratio(ac_954,ac),ratio(pro,ac),pro+ac+other]
+    print(pro+ac+other)
     return res
