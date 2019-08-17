@@ -64,7 +64,7 @@ class ExampleProtocol(ApiProtocol):
                                                                                                        content) and re.search(
                     '考研', content) or re.search('几天', content) and re.search('考研', content):
                 # 构造一个将来的时间
-                future = datetime.strptime('2019-12-21 00:00:00', '%Y-%m-%d %H:%M:%S')
+                future = datetime.strptime('2019-12-22 00:00:00', '%Y-%m-%d %H:%M:%S')
                 # 当前时间
                 now = datetime.now()
                 # 求时间差
@@ -87,7 +87,7 @@ class ExampleProtocol(ApiProtocol):
                                                                                                        content) and re.search(
                     '考研', content) or re.search('几天', content) and re.search('考研', content):
                 # 构造一个将来的时间
-                future = datetime.strptime('2019-12-21 00:00:00', '%Y-%m-%d %H:%M:%S')
+                future = datetime.strptime('2019-12-22 00:00:00', '%Y-%m-%d %H:%M:%S')
                 # 当前时间
                 now = datetime.now()
                 # 求时间差
